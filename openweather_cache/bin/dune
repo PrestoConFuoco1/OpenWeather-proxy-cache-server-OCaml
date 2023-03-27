@@ -1,0 +1,4 @@
+(executable
+ (public_name openweather_cache)
+ (name main)
+ (libraries openweather_cache))

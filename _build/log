@@ -1,0 +1,5 @@
+# dune init project openweather_cache
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root: /home/yuri/prog/ocaml/openweather
+# Auto-detected concurrency: 16
