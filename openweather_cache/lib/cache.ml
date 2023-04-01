@@ -16,7 +16,7 @@ let rzhev_lon = 34.334267
 type latlong =
   { lat : float
   ; lon : float
-  } [@@deriving repr]
+  } [@@deriving repr, sexp]
 
 type current =
   { dt : int
@@ -36,6 +36,12 @@ type response =
   ; current : current
   } [@@deriving yojson, sexp, repr]
     [@@yojson.allow_extra_fields]
+
+type location_identifier =
+  | Zipcode of string
+  | Name of string
+  | Coords of latlong
+    [@@deriving repr, sexp]
 
 (* Call *)
 let response_of_json_text resp =
@@ -63,6 +69,7 @@ let call_current_weather_by_coords ~api_key ({lat; lon} : latlong) =
   Lwt.return decoded_response
 
 let just_print x_t x = Fmt.pf Fmt.stdout "%a" (Repr.pp_dump x_t) x
+let just_print_lwt x_t x = Lwt_fmt.printf "%a" (Repr.pp_dump x_t) x
 
 module For_testing = struct
 

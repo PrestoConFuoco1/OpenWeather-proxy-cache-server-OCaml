@@ -1,13 +1,7 @@
 open Opium
 open Cache
-
-
-
-type location_identifier =
-  | Zipcode of string
-  | Name of string
-  | Coords of latlong
-    [@@deriving repr]
+open Sexplib.Conv
+open Sexplib.Sexp
 
 let rec asum_option opts =
   match opts with
@@ -26,13 +20,12 @@ let get_location_identifier (req : Request.t) =
   let name = Base.Option.try_with (fun () -> 
     let place_name = Request.query_exn "name" req in
     Name place_name) in
-  let coords = (try
+  let coords = Base.Option.try_with (fun () ->
     Printf.printf "before lat";
     let lat = Request.query_exn "lat" req |> Float.of_string in
     Printf.printf "before lon";
     let lon = Request.query_exn "lon" req |> Float.of_string in
-    Some (Coords { lat; lon })
-  with | ex -> print_endline (Printexc.to_string_default ex); None) in
+    Coords { lat; lon }) in
   asum_option [zipcode; name; coords]
 
 let identifier_to_latlong = function
@@ -50,10 +43,31 @@ let handler ~api_key req : Response.t Lwt.t =
     let%lwt res = call_current_weather_by_coords ~api_key latlong in
     Lwt.return (yojson_of_response res |> Response.of_json)
 
+let io_mutex = Lwt_mutex.create ()
+
+let rec cache_filler_thread idx cfg api_key location () =
+  let%lwt res = call_current_weather_by_coords ~api_key location in
+  let%lwt () = Lwt_mutex.with_lock io_mutex (fun () ->
+    let%lwt () = Lwt_fmt.printf "thread %d\n" idx in
+    just_print_lwt response_t res) in
+  let%lwt () = Lwt_unix.sleep 20. in
+  cache_filler_thread idx cfg api_key location ()
+
 let api_key = Sys.getenv "OW_APIKEY"
 
+let load_config (opt_filename : string option) : Config.config =
+  let filename = Option.value opt_filename ~default:"config" in
+  load_sexp_conv_exn filename Config.config_of_sexp
+
 let run () =
+  let config = load_config None in
+  (*
+  let print_exception e = Printf.eprintf "%s\n" @@ Printexc.to_string_default e in
+  let locations = Lwt_main.run (Lwt_list.map_p identifier_to_latlong config.locations) in
+  let () = List.iteri (fun idx loc -> Lwt.dont_wait (cache_filler_thread idx config api_key loc) print_exception) locations in *)
+(*   let () = Lwt.dont_wait (cache_filler_thread config api_key locations) print_exception in *)
   App.empty
-  |> App.port 9120
+(*   |> App.port 9120 *)
+  |> App.port config.port
   |> App.get "/weather" (handler ~api_key)
   |> App.run_command

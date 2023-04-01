@@ -1,0 +1,8 @@
+(
+ (port 9120)
+ (locations
+  ((Coords ((lat 56.262955) (lon 34.334267)))
+   (Coords ((lat 55.7522) (lon 37.6156)))))
+ (update_period_sec 3)
+ (time_accuracy_sec 9)
+ (distance_accuracy_km 6))
