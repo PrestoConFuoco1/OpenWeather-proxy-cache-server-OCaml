@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "8b81f355-67f6-498b-9471-0b6c54ee500d",
+		"name": "openweather",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26593515"
+	},
+	"item": [
+		{
+			"name": "https://api.openweathermap.org/data/3.0/onecall?lat=34.334267&lon=56.262955&exclude=hourly&appid=08a9fc08a909b0f3de55b60ce736fbfa\n",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/3.0/onecall?lat=56.262955&lon=34.334267&exclude=hourly,daily,minutely&appid={{openweather_api_key}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"3.0",
+						"onecall"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "56.262955"
+						},
+						{
+							"key": "lon",
+							"value": "34.334267"
+						},
+						{
+							"key": "exclude",
+							"value": "hourly,daily,minutely"
+						},
+						{
+							"key": "appid",
+							"value": "{{openweather_api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "openweather_api_key",
+			"value": "08a9fc08a909b0f3de55b60ce736fbfa"
+		}
+	]
+}

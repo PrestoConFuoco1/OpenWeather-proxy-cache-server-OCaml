@@ -1,2 +1,8 @@
 (library
- (name openweather_cache))
+ (libraries core cohttp cohttp-lwt cohttp-lwt-unix fmt opium)
+ (flags :standard -warn-error -26-22-32-33-27)
+ (name openweather_cache)
+ (preprocess
+  (pps ppx_yojson_conv ppx_jane lwt_ppx ppx_deriving.show ppx_repr))
+ (inline_tests)
+ )
