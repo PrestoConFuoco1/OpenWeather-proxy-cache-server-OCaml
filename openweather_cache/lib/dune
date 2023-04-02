@@ -1,5 +1,5 @@
 (library
- (libraries core cohttp cohttp-lwt cohttp-lwt-unix fmt opium batteries interval-map)
+ (libraries core cohttp cohttp-lwt cohttp-lwt-unix fmt opium batteries interval-map logs mtime)
  (flags :standard -warn-error -26-22-32-33-27)
  (name openweather_cache)
  (preprocess
