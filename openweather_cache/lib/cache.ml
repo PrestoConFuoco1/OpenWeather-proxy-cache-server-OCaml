@@ -69,7 +69,7 @@ let call_current_weather_by_coords ~api_key ({lat; lon} : latlong) =
   Lwt.return decoded_response
 
 let just_print x_t x = Fmt.pf Fmt.stdout "%a" (Repr.pp_dump x_t) x
-let just_print_lwt x_t x = Lwt_fmt.printf "%a" (Repr.pp_dump x_t) x
+let just_print_lwt x_t x = Lwt_fmt.printf "%a\n%!" (Repr.pp_dump x_t) x
 
 module For_testing = struct
 

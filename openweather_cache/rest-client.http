@@ -1,4 +1,8 @@
 @api_key = 08a9fc08a909b0f3de55b60ce736fbfa
 
 # @name main
-GET localhost:9120/weather?lat=56.262955&lon=34.334267
+# GET localhost:9120/weather?lat=56.262955&lon=34.334267
+GET localhost:9120/weather?lat=56.26&lon=34.23
+
+
+#
