@@ -1,6 +1,4 @@
 open Sexplib.Conv
-open Cohttp_lwt_unix
-open Uri
 
 type latlong = {lat : float; lon : float} [@@deriving repr, sexp]
 
@@ -25,28 +23,6 @@ type response = {
 (* Call *)
 let response_of_json_text resp =
   response_of_yojson @@ Yojson.Safe.from_string resp
-
-let base_uri = Uri.of_string "https://api.openweathermap.org/data/3.0/onecall"
-
-let call_current_weather_by_coords ~api_key ({lat; lon} : latlong) =
-  let uri_with_query_params =
-    let query_params =
-      [
-        ("lat", Float.to_string lat);
-        ("lon", Float.to_string lon);
-        ("appid", api_key);
-        ("exclude", "hourly,daily,minutely,alerts");
-      ]
-    in
-    List.fold_left
-      (fun uri (k, v) -> add_query_param uri (k, [v]))
-      base_uri
-      query_params
-  in
-  let%lwt _resp, body = Client.get uri_with_query_params in
-  let%lwt body = Cohttp_lwt.Body.to_string body in
-  let decoded_response = response_of_json_text body in
-  Lwt.return decoded_response
 
 module For_testing = struct
   let example_current =
