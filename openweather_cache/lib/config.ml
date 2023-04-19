@@ -1,5 +1,5 @@
-open Cache
 open Sexplib.Conv
+open Types
 
 type config =
   { port : int
@@ -28,3 +28,7 @@ let default_config =
   ; time_accuracy_sec = Some 9
   ; distance_accuracy_km = Some 20
   }
+
+let load_config opt_filename =
+  let filename = Option.value opt_filename ~default:"config" in
+  Sexplib.Sexp.load_sexp_conv_exn filename config_of_sexp
