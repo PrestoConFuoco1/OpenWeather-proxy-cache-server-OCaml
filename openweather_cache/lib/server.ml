@@ -1,4 +1,5 @@
 open Base
+open Core
 open Opium
 open Types
 
@@ -211,6 +212,8 @@ module OWLog = struct
     Logs.set_level level ;
     Logs.set_reporter (reporter ())
 end
+
+
 
 let run () =
   let api_key = Sys.getenv_exn "OW_APIKEY" in
